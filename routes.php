@@ -15,4 +15,9 @@ switch ($_POST['route']) {
         $comm = new \App\InteractionWithUser();
         $comm->userAdd($_POST['email'], $_POST['pwd'], $_POST['userName'], $_POST['age'], $_POST['userDescribe']);
         break;
+    case 'allImagesByUser':
+        require "controllers/CommonInfo.php";
+        $comm = new \App\CommonInfo();
+        $comm->allFilesList($_POST['userID']);
+        break;
 }

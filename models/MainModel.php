@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-require("../config.php");
+require("config.php");
 
 class MainModel
 {

@@ -1,2 +1,2 @@
 <?php
-require("views/enterToSystem.html");
+require("views/enterToSystem.php");

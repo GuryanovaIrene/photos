@@ -44,7 +44,6 @@ class User extends MainModel
         $prepare->execute(['email' => $this->email]);
         $data = $prepare->fetchAll(\PDO::FETCH_ASSOC);
         if (count($data) > 0) {
-            echo 1;
             $this->error[] = DOUBLE_USER;
             return null;
         }

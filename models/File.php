@@ -51,6 +51,7 @@ class File extends MainModel
         if (empty($this->error)) {
             // Загрузка файла и вывод сообщения
             $res = @copy($this->tmpName, PATH . $this->imageName);
+            echo $res;
             if (!$res) {
                 $arr[] = FILE_IS_NOT_LOADED;
             }

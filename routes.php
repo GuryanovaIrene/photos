@@ -20,4 +20,10 @@ switch ($_POST['route']) {
         $comm = new \App\CommonInfo();
         $comm->allFilesList($_POST['userID']);
         break;
+    case 'allUsersInfo':
+        require "controllers/AllUsersInfo.php";
+        $comm = new \App\AllUsersInfo();
+        $comm->usersList('ASC');
+        $comm->usersList('DESC');
+        break;
 }

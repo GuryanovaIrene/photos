@@ -36,7 +36,7 @@ class User extends MainModel
         }
     }
 
-    function reg()
+    public function reg()
     {
         $pdo = $this->conn();
         $prepare = $pdo->prepare('select userID from users
@@ -47,15 +47,13 @@ class User extends MainModel
             $this->error[] = DOUBLE_USER;
             return null;
         }
-        echo 'e-mail: ' . $this->email . '<br/>userName: ' . $this->userName . '<br/>';
-        echo 'password: ' . $this->pwd . '<br/>age: ' . $this->age . '<br/>userDescribe: ' . $this->userDescribe . '<br/>';
         $prepare = $pdo->prepare('insert into users(userName, email, pwd, age, userDescribe)
                                         values (:userName, :email, :pwd, :age, :userDescribe)');
         $prepare->execute(['userName' => $this->userName, 'email' => $this->email, 'pwd' => password_hash($this->pwd, PASSWORD_DEFAULT),
                                     'age' => $this->age, 'userDescribe' => $this->userDescribe]);
     }
 
-    function auth()
+    public function auth()
     {
         $pdo = $this->conn();
         $prepare = $pdo->prepare('select userID, userName, age, userDescribe, pwd from users where lower(email) = lower(:email)');

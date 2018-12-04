@@ -1,1 +1,1 @@
-<a href="<?php echo $value['url']?>"><?php echo $value['url']?></a><br/>
+<li><a href="<?php echo $value['url']?>"><?php echo $value['url']?></a></li>

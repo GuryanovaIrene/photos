@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1 align="center">Войти в систему</h1>
-<form method="post" action="routes.php">
+<form method="post" action="routes/routes.php">
     <input type="hidden" name="route" value="auth"/>
     <table align="center">
         <tr>

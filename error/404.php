@@ -1,6 +1,7 @@
 404 not found
 <br>
 <?php
+/*
 if (defined('MODE') && MODE == 'dev') { ?>
     Error: <br><pre>
     <?php
@@ -8,4 +9,5 @@ if (defined('MODE') && MODE == 'dev') { ?>
     echo 'File:'. $e->getFile() . "<br>";
     echo $e->getMessage()."<br>";
     echo $e->getTraceAsString();
-}
+}*/?>
+    Error:

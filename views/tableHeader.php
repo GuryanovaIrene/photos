@@ -1,3 +1,4 @@
+<h3 align="center">Список всех пользователей.<br/>Сортировка <?php echo $sortTypeName;?> возраста</h3>
 <table align="center">
     <thead>
     <tr>

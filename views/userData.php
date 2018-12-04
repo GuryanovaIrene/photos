@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1 align="center">Введите данные для регистрации в системе</h1>
-<form method="post" action="../routes.php">
+<form method="post" action="../routes/routes.php">
     <input type="hidden" name="route" value="userAdd"/>
     <table align="center">
         <td>e-mail</td>

@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-class File extends MainModel
+class File extends User
 {
     public $fileID;
     public $url;
@@ -13,7 +13,7 @@ class File extends MainModel
 
     public function __construct($userID, $fileType, $fileSize, $tmpName, $fileName)
     {
-        $this->userID = $userID;
+        parent::__construct($userID, '', '', '', '', '');
         $this->fileType = $fileType;
         $this->fileSize = $fileSize;
         $this->tmpName = $tmpName;
@@ -51,9 +51,8 @@ class File extends MainModel
         if (empty($this->error)) {
             // Загрузка файла и вывод сообщения
             $res = @copy($this->tmpName, PATH . $this->imageName);
-            echo $res;
             if (!$res) {
-                $arr[] = FILE_IS_NOT_LOADED;
+                $this->error[] = FILE_IS_NOT_LOADED;
             }
         }
     }

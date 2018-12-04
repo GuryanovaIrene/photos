@@ -3,11 +3,12 @@ namespace App;
 
 class User extends MainModel
 {
+    public $userID;
     public $userName;
     private $pwd;
     private $email;
-    protected $age;
-    protected $userDescribe;
+    public $age;
+    public $userDescribe;
 
     public function __construct($userID, $email, $pwd, $userName, $age, $userDescribe)
     {
@@ -73,5 +74,14 @@ class User extends MainModel
             $this->age = $user['age'];
             $this->userDescribe = $user['userDescribe'];
         }
+    }
+
+    public function allImages()
+    {
+        $pdo = $this->conn();
+        $prepare = $pdo->prepare('select url from photos where userID = :userID');
+        $prepare->execute(['userID' => $this->userID]);
+
+        return $prepare->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

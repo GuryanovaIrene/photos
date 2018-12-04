@@ -5,6 +5,8 @@ const DSN = "mysql:host=127.0.0.1;dbname=photos;charset=utf8";
 const DOUBLE_USER = 'Пользователь с таким e-mail уже есть в системе';
 const WRONG_USER = 'Неверная пара пользователь/пароль';
 const WRONG_PASSWORD = 'Неверный пароль';
+const SUCCESS_GENERATE_USER = 'Пользователь сгенерирован успешно';
+const TRY_ENTER_AGAIN = 'Попытаться войти снова';
 
 const BAN_FILE_TYPE = 'Запрещённый тип файла';
 const LARGE_FILE = 'Слишком большой размер файла';

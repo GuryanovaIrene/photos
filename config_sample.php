@@ -13,3 +13,4 @@ const SUCCESS = 'Загрузка прошла успешно';
 const ERR_USER_TITLE= 'Были обнаружены следующие ошибки: ';
 const ERR_FILE_TITLE = 'При загрузке возникли ошибки:';
 const MODE = 'dev';
+const PATH = 'images/';

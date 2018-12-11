@@ -1,12 +1,14 @@
 <?php
 
-require "../core/config.php";
-require "../core/capsule.php";
+require_once("../models/MainModel.php");
+require_once("../models/User.php");
+require_once("../core/capsule.php");
 
-use Illuminate\Database\Capsule\Manager as CapsuleProducts;
+
+use App\User;
+
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
 
 Capsule::schema()->dropIfExists('users');
 
@@ -26,3 +28,9 @@ Capsule::schema()->create('photos', function (Blueprint $table) {
     $table->string('url');
     $table->integer('userID');
 });
+
+$faker = Faker\Factory::create();
+for ($i = 1; $i <= 20; $i++) {
+    $user = new User('', $faker->email, $faker->password, $faker->userName, $faker->numberBetween(1, 99), $faker->text);
+    $user->reg();
+}

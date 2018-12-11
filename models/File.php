@@ -1,5 +1,9 @@
 <?php
 namespace App;
+use Intervention\Image\ImageManagerStatic as IImage;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 
 class File extends User
 {
@@ -50,7 +54,7 @@ class File extends User
         $this->check();
         if (empty($this->error)) {
             // Загрузка файла и вывод сообщения
-            $res = @copy($this->tmpName, PATH . $this->imageName);
+            $res = @copy($this->tmpName, $this->imageName);
             if (!$res) {
                 $this->error[] = FILE_IS_NOT_LOADED;
             }
@@ -60,17 +64,21 @@ class File extends User
     public function addToDb()
     {
         $imageName = $this->generate_random_string(8) . '.' . $this->imageExt;
-        $pdo = $this->conn();
-        $prepare = $pdo->prepare('insert into photos(userID)
-                                        values (:userID)');
-        $prepare->execute(['userID' => $this->userID]);
-        $this->fileID = $pdo->lastInsertId();
+
+        require "../core/capsule.php";
+        Capsule::table('photos')
+            ->insert(['userID' => $this->userID]);
+        $photoID = Capsule::table('photos')
+                    ->max('photoID');
+        $this->fileID = $photoID;
+
         //  Почему 2 запроса? Хотелось бы получить уникальное имя файла.
         //  Поэтому сначала добавляем запись, получаем ИД, затем имя формируем имя файла:
         //    идФайла_случайноеИмя.расширение
-        $imageName = $this->fileID .'_' . $imageName;
-        $prepare = $pdo->prepare('update photos set url = :url where photoID = :photoID');
-        $prepare->execute(['photoID' => $this->fileID, 'url' => PATH . $imageName]);
+        $imageName = PATH . $this->fileID .'_' . $imageName;
+        Capsule::table('photos')
+            ->where('photoID', '=', $this->fileID)
+            ->update(['url' => $imageName]);
         $this->imageName = $imageName;
     }
 

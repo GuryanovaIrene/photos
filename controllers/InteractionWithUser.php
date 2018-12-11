@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use Intervention\Image;
 
 class InteractionWithUser
 {
@@ -74,6 +75,24 @@ class InteractionWithUser
         }
     }
 
+    public function userAddForAdmin($email, $pwd, $userName, $age, $userDescribe)
+    {
+        require_once("../models/MainModel.php");
+        require_once "../models/User.php";
+
+        $user = new User('', $email, $pwd, $userName, $age, $userDescribe);
+
+        $user->reg();
+        if (empty($user->error)) {
+            require "../routes/admin.php";
+        } else {
+            echo ERR_USER_TITLE;
+            foreach ($user->error as $error) {
+                echo $error . '<br/>';
+            }
+        }
+    }
+
     public function allFilesList($user)
     {
         $images = $user->allImages();
@@ -82,5 +101,22 @@ class InteractionWithUser
             require "../views/imageLook.php";
         }
         require "../views/imageLookFooter.php";
+    }
+
+    public function editUser($userID)
+    {
+        require_once("../models/MainModel.php");
+        require_once("../models/User.php");
+        $user = new User($userID, '', '', '', '', '');
+        require "../views/editUser.php";
+    }
+
+    public function updateUser($userID, $userName, $age, $userDescribe)
+    {
+        require_once("../models/MainModel.php");
+        require_once("../models/User.php");
+        $user = new User($userID, '', '', '', '', '');
+        $user->updateUser($userID, $userName, $age, $userDescribe);
+        require "../routes/admin.php";
     }
 }

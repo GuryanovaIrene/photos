@@ -1,24 +1,29 @@
 <?php
 
 namespace App;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 
 class AllUsers extends MainModel
 {
     public function usersListAsc()
     {
-        $pdo = $this->conn();
-        $prepare = $pdo->prepare('select userID, userName, email, age, userDescribe from users
-                                    order by age asc');
-        $prepare->execute();
-        return $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        require "../core/capsule.php";
+        $data = Capsule::table('users')
+            ->select(['userID', 'userName', 'email', 'age', 'userDescribe'])
+            ->orderBy('age', 'asc')
+            ->get();
+        return $data;
     }
 
     public function usersListDesc()
     {
-        $pdo = $this->conn();
-        $prepare = $pdo->prepare('select userID, userName, email, age, userDescribe from users
-                                    order by age desc');
-        $prepare->execute();
-        return $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        require "../core/capsule.php";
+        $data = Capsule::table('users')
+            ->select(['userID', 'userName', 'email', 'age', 'userDescribe'])
+            ->orderBy('age', 'desc')
+            ->get();
+        return $data;
     }
 }

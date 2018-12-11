@@ -1,12 +1,16 @@
 <?php
 namespace App;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+
 class User extends MainModel
 {
     public $userID;
     public $userName;
-    private $pwd;
-    private $email;
+    public $pwd;
+    public $email;
     public $age;
     public $userDescribe;
 
@@ -15,17 +19,17 @@ class User extends MainModel
         if ($userID > 0) {
             $this->userID = $userID;
 
-            $pdo = $this->conn();
-            $prepare = $pdo->prepare('select userName, email, pwd, age, userDescribe from users
-                                        where userID = :userID');
-            $prepare->execute(['userID' => $userID]);
-            $data = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            require "../core/capsule.php";
+            $data = Capsule::table('users')
+                ->where('userID', '=', $userID)
+                ->select(['email', 'userName', 'age', 'userDescribe', 'pwd'])
+                ->get();
             foreach ($data as $user) {
-                $this->email = $user['email'];
-                $this->userName = $user['userName'];
-                $this->pwd = $user['pwd'];
-                $this->age = $user['age'];
-                $this->userDescribe = $user['userDescribe'];
+                $this->email = $user->email;
+                $this->userName = $user->userName;
+                $this->pwd = $user->pwd;
+                $this->age = $user->age;
+                $this->userDescribe = $user->userDescribe;
             }
         } else {
             $this->userID = '';
@@ -39,49 +43,58 @@ class User extends MainModel
 
     public function reg()
     {
-        $pdo = $this->conn();
-        $prepare = $pdo->prepare('select userID from users
-                                        where email = :email');
-        $prepare->execute(['email' => $this->email]);
-        $data = $prepare->fetchAll(\PDO::FETCH_ASSOC);
-        if (count($data) > 0) {
+        require "../core/capsule.php";
+        $data = Capsule::table('users')
+            ->where('email', '=', $this->email)
+            ->get();
+        if (isset($data->userID)) {
             $this->error[] = DOUBLE_USER;
             return null;
         }
-        $prepare = $pdo->prepare('insert into users(userName, email, pwd, age, userDescribe)
-                                        values (:userName, :email, :pwd, :age, :userDescribe)');
-        $prepare->execute(['userName' => $this->userName, 'email' => $this->email, 'pwd' => password_hash($this->pwd, PASSWORD_DEFAULT),
-                                    'age' => $this->age, 'userDescribe' => $this->userDescribe]);
+        Capsule::table('users')
+            ->insert(['userName' => $this->userName, 'email' => $this->email, 'pwd' => password_hash($this->pwd, PASSWORD_DEFAULT),
+                    'age' => $this->age, 'userDescribe' => $this->userDescribe]);
     }
 
     public function auth()
     {
-        $pdo = $this->conn();
-        $prepare = $pdo->prepare('select userID, userName, age, userDescribe, pwd from users where lower(email) = lower(:email)');
-        $prepare->execute(['email' => $this->email]);
-        $data = $prepare->fetchAll(\PDO::FETCH_ASSOC);
-        if (count($data) == 0) {
+        require "../core/capsule.php";
+        $data = Capsule::table('users')
+            ->where('email', '=',  strtolower($this->email))
+            ->select(['userID', 'userName', 'age', 'userDescribe', 'pwd'])
+            ->get();
+
+        if (empty($data)) {
             $this->error[] = WRONG_USER;
             return null;
         }
         foreach ($data as $user) {
-            if (!password_verify($this->pwd, $user['pwd'])) {
+            if (!password_verify($this->pwd, $user->pwd)) {
                 $this->error[] = WRONG_PASSWORD;
                 return null;
             }
-            $this->userID = $user['userID'];
-            $this->userName = $user['userName'];
-            $this->age = $user['age'];
-            $this->userDescribe = $user['userDescribe'];
+            $this->userID = $user->userID;
+            $this->userName = $user->userName;
+            $this->age = $user->age;
+            $this->userDescribe = $user->userDescribe;
         }
+    }
+
+    public function updateUser($userID, $userName, $age, $userDescribe)
+    {
+        require "../core/capsule.php";
+        Capsule::table('users')
+            ->where('userID', '=', $userID)
+            ->update(['userName' => $userName, 'age' => $age, 'userDescribe' => $userDescribe]);
     }
 
     public function allImages()
     {
-        $pdo = $this->conn();
-        $prepare = $pdo->prepare('select url from photos where userID = :userID');
-        $prepare->execute(['userID' => $this->userID]);
-
-        return $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        require "../core/capsule.php";
+        $data = Capsule::table('photos')
+            ->where('userID', '=', $this->userID)
+            ->select(['photoID', 'url'])
+            ->get();
+        return $data;
     }
 }

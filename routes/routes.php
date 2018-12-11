@@ -21,4 +21,16 @@ switch ($_POST['route']) {
     case 'returnToUser':
         $route->returnToUser();
         break;
+    case 'transformImage':
+        $route->transImage();
+        break;
+    case 'userAddForAdmin':
+        $route->userAddForAdmin();
+        break;
+    case 'editUser':
+        $route->editUser();
+        break;
+    case 'updateUser':
+        $route->updateUser();
+        break;
 }

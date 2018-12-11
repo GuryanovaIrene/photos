@@ -7,8 +7,8 @@ class MainModel
 {
     public $error = [];
 
-    public function conn()
+/*    public function conn()
     {
-        return new \PDO(DSN, 'root', '');
-    }
+        return new \PDO($dsn, $dsn['username'], $dsn['password']);
+    }*/
 }

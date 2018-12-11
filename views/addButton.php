@@ -1,0 +1,1 @@
+<div align="center"><a href="../views/userDataForAdmin.php">Добавить пользователя</a></div>

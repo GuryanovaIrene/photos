@@ -19,13 +19,10 @@ Capsule::schema()->create('users', function (Blueprint $table) {
             $table->text('userDescribe');
         });
 
-Capsule::schema()->dropIfExists('users');
+Capsule::schema()->dropIfExists('photos');
 
-Capsule::schema()->create('users', function (Blueprint $table) {
-    $table->increments('userID');
-    $table->string('email');
-    $table->string('userName');
-    $table->string('pwd');
-    $table->integer('age');
-    $table->text('userDescribe');
+Capsule::schema()->create('photos', function (Blueprint $table) {
+    $table->increments('photoID');
+    $table->string('url');
+    $table->integer('userID');
 });
